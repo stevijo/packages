@@ -72,9 +72,7 @@ start_instance() {
 			;;
 	esac
 
-	config_load 'dhcp'
 # shellcheck disable=SC2154
-	config_foreach dnsmasq_add_doh_server 'dnsmasq' "${listen_addr}#${listen_port}"
 	p="$((p+1))"
 }
 
@@ -87,21 +85,10 @@ start_service() {
 	dhcp_backup 'create'
 	config_load 'https-dns-proxy'
 	config_foreach start_instance 'https-dns-proxy'
-	if [ -z "$(uci -q get dhcp.@dnsmasq[0].server)" ]; then
-		dhcp_backup 'restore'
-	fi
-	if [ -n "$(uci -q changes dhcp)" ]; then
-		uci -q commit dhcp
-		[ -x /etc/init.d/dnsmasq ] && /etc/init.d/dnsmasq restart >/dev/null 2>&1
-	fi
 }
 
 stop_service() {
-	dhcp_backup 'restore'
-	if [ -n "$(uci -q changes dhcp)" ]; then
-		uci -q commit dhcp
-		[ -x /etc/init.d/dnsmasq ] && /etc/init.d/dnsmasq restart >/dev/null 2>&1
-	fi
+
 }
 
 service_triggers() {

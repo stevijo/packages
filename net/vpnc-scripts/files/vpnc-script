@@ -64,7 +64,7 @@ do_connect() {
 		MTU=1412
 	fi
 
-	proto_add_ipv4_address "$INTERNAL_IP4_ADDRESS" 32 "" "$INTERNAL_IP4_ADDRESS"
+	proto_add_ipv4_address "$INTERNAL_IP4_ADDRESS" 24 "" "$INTERNAL_IP4_ADDRESS"
 
 	if [ -n "$INTERNAL_IP4_NETMASKLEN" ]; then
 		proto_add_ipv4_route "$INTERNAL_IP4_NETADDR" "$INTERNAL_IP4_NETMASKLEN"
